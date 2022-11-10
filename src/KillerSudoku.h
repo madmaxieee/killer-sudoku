@@ -41,9 +41,9 @@ public:
     void generateCages();
 
     // getters
-    std::vector<Box> getBoxes();
-    std::vector<std::vector<int>> getSolution();
-    std::vector<Cage> getCages();
+    std::vector<Box> &getBoxes();
+    std::vector<std::vector<int>> &getSolution();
+    std::vector<Cage> &getCages();
 
 private:
     int size;

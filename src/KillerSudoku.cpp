@@ -25,9 +25,9 @@ void KillerSudoku::newGame()
 
 void KillerSudoku::printSolution()
 {
-    for (int i = 0; i < this->size * this->size; i++)
+    for (int i = 0; i < size * size; i++)
     {
-        for (int j = 0; j < this->size * this->size; j++)
+        for (int j = 0; j < size * size; j++)
         {
             // pad single digit numbers with a space
             if (this->solution[i][j] < 10)
@@ -43,7 +43,7 @@ void KillerSudoku::printSolution()
 
 void KillerSudoku::printCages()
 {
-    std::vector<std::vector<int>> cageGrid(this->size * this->size, std::vector<int>(this->size * this->size, 0));
+    std::vector<std::vector<int>> cageGrid(size * size, std::vector<int>(size * size, 0));
     // fill cageGrid with cage sum
     for (int i = 0; i < this->cages.size(); i++)
     {
@@ -53,9 +53,9 @@ void KillerSudoku::printCages()
         }
     }
 
-    for (int i = 0; i < this->size * this->size; i++)
+    for (int i = 0; i < size * size; i++)
     {
-        for (int j = 0; j < this->size * this->size; j++)
+        for (int j = 0; j < size * size; j++)
         {
             // pad single digit numbers with a space
             if (cageGrid[i][j] < 10)
@@ -69,17 +69,17 @@ void KillerSudoku::printCages()
     std::cout << std::endl;
 }
 
-std::vector<Box> KillerSudoku::getBoxes()
+std::vector<Box> &KillerSudoku::getBoxes()
 {
     return this->boxes;
 }
 
-std::vector<std::vector<int>> KillerSudoku::getSolution()
+std::vector<std::vector<int>> &KillerSudoku::getSolution()
 {
     return this->solution;
 }
 
-std::vector<Cage> KillerSudoku::getCages()
+std::vector<Cage> &KillerSudoku::getCages()
 {
     return this->cages;
 }
@@ -87,14 +87,15 @@ std::vector<Cage> KillerSudoku::getCages()
 void KillerSudoku::initBoxes()
 {
     this->boxes = std::vector<Box>();
-    for (int i = 0; i < this->size * this->size; i += this->size)
+    this->boxes.reserve(size * size * 3);
+    for (int i = 0; i < size * size; i += size)
     {
-        for (int j = 0; j < this->size * this->size; j += this->size)
+        for (int j = 0; j < size * size; j += size)
         {
             Box box;
-            for (int k = 0; k < this->size; k++)
+            for (int k = 0; k < size; k++)
             {
-                for (int l = 0; l < this->size; l++)
+                for (int l = 0; l < size; l++)
                 {
                     box.insert(std::make_pair(i + k, j + l));
                 }
@@ -103,11 +104,11 @@ void KillerSudoku::initBoxes()
         }
     }
     // generate rows and columns
-    for (int i = 0; i < this->size * this->size; i++)
+    for (int i = 0; i < size * size; i++)
     {
         Box row;
         Box col;
-        for (int j = 0; j < this->size * this->size; j++)
+        for (int j = 0; j < size * size; j++)
         {
             row.insert(std::make_pair(i, j));
             col.insert(std::make_pair(j, i));
@@ -119,23 +120,23 @@ void KillerSudoku::initBoxes()
 
 void KillerSudoku::generateNewSolution()
 {
-    this->solution = std::vector<std::vector<int>>(this->size * this->size,
-                                                   std::vector<int>(this->size * this->size, 0));
+    this->solution = std::vector<std::vector<int>>(size * size,
+                                                   std::vector<int>(size * size, 0));
 
     // fill diagonal boxes
-    for (int i = 0; i < this->size * this->size; i += this->size)
+    for (int i = 0; i < size * size; i += size)
     {
         std::vector<int> nums;
-        for (int j = 1; j <= this->size * this->size; j++)
+        for (int j = 1; j <= size * size; j++)
         {
             nums.push_back(j);
         }
         std::shuffle(nums.begin(), nums.end(), this->rng);
-        for (int j = 0; j < this->size; j++)
+        for (int j = 0; j < size; j++)
         {
-            for (int k = 0; k < this->size; k++)
+            for (int k = 0; k < size; k++)
             {
-                this->solution[i + j][i + k] = nums[j * this->size + k];
+                this->solution[i + j][i + k] = nums[j * size + k];
             }
         }
     }
@@ -145,11 +146,11 @@ void KillerSudoku::generateNewSolution()
 
 bool KillerSudoku::fillCells(int row, int col)
 {
-    if (row == this->size * this->size)
+    if (row == size * size)
     {
         return true;
     }
-    if (col == this->size * this->size)
+    if (col == size * size)
     {
         return this->fillCells(row + 1, 0);
     }
@@ -157,13 +158,13 @@ bool KillerSudoku::fillCells(int row, int col)
     {
         return this->fillCells(row, col + 1);
     }
-    if (row / this->size == col / this->size)
+    if (row / size == col / size)
     {
         return this->fillCells(row, col + 1);
     }
 
     std::vector<int> possibleNums;
-    for (int i = 1; i <= this->size * this->size; i++)
+    for (int i = 1; i <= size * size; i++)
     {
         possibleNums.push_back(i);
     }
@@ -173,9 +174,9 @@ bool KillerSudoku::fillCells(int row, int col)
     {
         if (this->boxes[i].find(std::make_pair(row, col)) != this->boxes[i].end())
         {
-            for (int j = 0; j < this->size * this->size; j++)
+            for (int j = 0; j < size * size; j++)
             {
-                for (int k = 0; k < this->size * this->size; k++)
+                for (int k = 0; k < size * size; k++)
                 {
                     if (this->boxes[i].find(std::make_pair(j, k)) != this->boxes[i].end())
                     {
@@ -210,13 +211,13 @@ bool KillerSudoku::fillCells(int row, int col)
 void KillerSudoku::generateCages()
 {
     this->cages = std::vector<Cage>();
-    std::vector<std::vector<bool>> covered = std::vector<std::vector<bool>>(this->size * this->size,
-                                                                            std::vector<bool>(this->size * this->size, false));
+    std::vector<std::vector<bool>> covered = std::vector<std::vector<bool>>(size * size,
+                                                                            std::vector<bool>(size * size, false));
     // randomly select a cell that is not covered from a set
     std::vector<Cell> uncoveredCells;
-    for (int i = 0; i < this->size * this->size; i++)
+    for (int i = 0; i < size * size; i++)
     {
-        for (int j = 0; j < this->size * this->size; j++)
+        for (int j = 0; j < size * size; j++)
         {
             uncoveredCells.push_back(std::make_pair(i, j));
         }
@@ -238,8 +239,8 @@ void KillerSudoku::generateCages()
     }
 
     // merge single cell cages with other cages adjacent cages
-    std::vector<std::vector<int>> cellToCageIndex = std::vector<std::vector<int>>(this->size * this->size,
-                                                                                  std::vector<int>(this->size * this->size, -1));
+    std::vector<std::vector<int>> cellToCageIndex = std::vector<std::vector<int>>(size * size,
+                                                                                  std::vector<int>(size * size, -1));
     std::vector<int> singleCellCageIndex = std::vector<int>();
     for (int i = 0; i < this->cages.size(); i++)
     {
@@ -262,7 +263,7 @@ void KillerSudoku::generateCages()
         {
             adjacentCageIndex.push_back(cellToCageIndex[cell.first - 1][cell.second]);
         }
-        if (cell.first < this->size * this->size - 1)
+        if (cell.first < size * size - 1)
         {
             adjacentCageIndex.push_back(cellToCageIndex[cell.first + 1][cell.second]);
         }
@@ -270,7 +271,7 @@ void KillerSudoku::generateCages()
         {
             adjacentCageIndex.push_back(cellToCageIndex[cell.first][cell.second - 1]);
         }
-        if (cell.second < this->size * this->size - 1)
+        if (cell.second < size * size - 1)
         {
             adjacentCageIndex.push_back(cellToCageIndex[cell.first][cell.second + 1]);
         }
@@ -292,8 +293,8 @@ void KillerSudoku::generateCages()
 
 void KillerSudoku::generateCage(Cage &cage, std::vector<std::vector<bool>> &covered)
 {
-    // max size is a random number with normal distribution centered at this->size
-    int maxSize = std::max(2, std::min(this->size * this->size, (int)std::round(std::normal_distribution<double>(this->size, 1)(this->rng))));
+    // max size is a random number with normal distribution centered at size
+    int maxSize = std::max(2, std::min(size * size, (int)std::round(std::normal_distribution<double>(size, 1)(this->rng))));
     // chose a random cell from the cage
     Cell cell;
     std::vector<int> directions = {0, 1, 2, 3};
@@ -345,7 +346,7 @@ void KillerSudoku::generateCage(Cage &cage, std::vector<std::vector<bool>> &cove
 
             Cell newCell = std::make_pair(row, col);
 
-            if (row >= 0 && row < this->size * this->size && col >= 0 && col < this->size * this->size && !covered[row][col])
+            if (row >= 0 && row < size * size && col >= 0 && col < size * size && !covered[row][col])
             {
                 cage.cells.push_back(newCell);
                 cage.sum += this->solution[row][col];
