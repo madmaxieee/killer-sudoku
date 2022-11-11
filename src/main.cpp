@@ -4,15 +4,15 @@
 
 int main()
 {
-    KillerSudoku ks(3);
+    int size = 3;
+    KillerSudoku ks(size);
     ks.generateNewSolution();
     ks.printSolution();
     ks.generateCages();
     ks.printCages();
 
-    KSSolver solver(3);
+    KSSolver solver(size);
     solver.createConstraints(ks.getCages(), ks.getBoxes());
-    // solver.printClauses();
     solver.solve();
     solver.reportResult();
 

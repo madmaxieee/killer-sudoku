@@ -24,12 +24,12 @@ public:
     void solve();
     void reportResult();
 
-    void printClauses();
-
 private:
     void createVars();
 
     void createEncodingConstraints();
+    void createRowConstraints();
+    void createColumnConstraints();
     void createBoxConstraints();
     void createCageConstraints();
 };

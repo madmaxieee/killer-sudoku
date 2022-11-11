@@ -107,29 +107,45 @@ void PBSatSolver::addSimplePBClause(const std::vector<Lit> &clause, const std::v
             buckets[i + 1].push(carry);
         }
 
-        addClause({sum & (1 << i) ? buckets[i].front() : ~buckets[i].front()});
+        if (buckets[i].size() == 1)
+        {
+            addClause({(sum & (1 << i)) ? buckets[i].front() : ~buckets[i].front()});
+        }
+
+        if (buckets[i].size() == 0)
+        {
+            if (sum & (1 << i))
+            {
+                addClause({lit_Error});
+            }
+        }
     }
 }
 
 std::vector<std::vector<Lit>> PBSatSolver::HA3(Lit x, Lit y, Lit z, Lit carry, Lit sum)
 {
-    std::vector<std::vector<Lit>> clauses(7);
-    clauses[0] = {x, y, z, ~sum};
-    clauses[1] = {x, ~y, ~z, ~sum};
-    clauses[2] = {~x, y, ~z, ~sum};
-    clauses[3] = {~x, ~y, z, ~sum};
-    clauses[4] = {y, z, ~carry};
-    clauses[5] = {x, z, ~carry};
-    clauses[6] = {x, y, ~carry};
+    std::vector<std::vector<Lit>> clauses;
+    clauses.push_back({z, ~carry, ~sum});
+    clauses.push_back({x, y, ~carry});
+    clauses.push_back({~z, carry, sum});
+    clauses.push_back({~x, ~y, carry});
+    clauses.push_back({x, y, z, ~sum});
+    clauses.push_back({x, ~y, ~z, ~sum});
+    clauses.push_back({~x, y, ~z, ~sum});
+    clauses.push_back({~x, ~y, ~z, sum});
+    clauses.push_back({~x, y, z, sum});
+    clauses.push_back({x, ~y, z, sum});
     return clauses;
 }
 
 std::vector<std::vector<Lit>> PBSatSolver::HA2(Lit x, Lit y, Lit carry, Lit sum)
 {
-    std::vector<std::vector<Lit>> clauses(4);
-    clauses[0] = {x, y, ~sum};
-    clauses[1] = {~x, ~y, ~sum};
-    clauses[2] = {x, ~carry};
-    clauses[3] = {y, ~carry};
+    std::vector<std::vector<Lit>> clauses;
+    clauses.push_back({x, y, ~sum});
+    clauses.push_back({~x, ~y, ~sum});
+    clauses.push_back({x, ~carry});
+    clauses.push_back({y, ~carry});
+    clauses.push_back({~x, carry, sum});
+    clauses.push_back({x, ~y, sum});
     return clauses;
 }
