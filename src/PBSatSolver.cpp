@@ -11,9 +11,8 @@ void PBSatSolver::reportResult()
         return;
     }
     _solver.printStats();
-    std::cout << std::endl;
-
     std::cout << "SAT" << std::endl;
+    std::cout << std::endl;
 }
 
 void PBSatSolver::addClause(const std::vector<Lit> &clause)

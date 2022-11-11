@@ -12,7 +12,7 @@ int main()
     ks.printCages();
 
     KSSolver solver(size);
-    solver.createConstraints(ks.getCages(), ks.getBoxes());
+    solver.createConstraints(ks.getCages());
     solver.printStats();
     solver.solve();
     solver.reportResult();

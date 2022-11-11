@@ -12,6 +12,7 @@ KSSolver::~KSSolver()
 
 void KSSolver::solve()
 {
+    std::cout << "Solving..." << std::endl;
     _solver.solve();
 }
 
@@ -61,10 +62,9 @@ void KSSolver::createVars()
     }
 }
 
-void KSSolver::createConstraints(const std::vector<Cage> &cages, const std::vector<Box> &boxes)
+void KSSolver::createConstraints(const std::vector<Cage> &cages)
 {
     this->cages = cages;
-    this->boxes = boxes;
     createEncodingConstraints();
     createRowConstraints();
     createColumnConstraints();
