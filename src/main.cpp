@@ -13,6 +13,7 @@ int main()
 
     KSSolver solver(size);
     solver.createConstraints(ks.getCages(), ks.getBoxes());
+    solver.printStats();
     solver.solve();
     solver.reportResult();
 

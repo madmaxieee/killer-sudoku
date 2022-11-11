@@ -39,6 +39,11 @@ void KSSolver::reportResult()
     }
 }
 
+void KSSolver::printStats()
+{
+    _solver.printStats();
+}
+
 void KSSolver::createVars()
 {
     variables.resize(size * size);

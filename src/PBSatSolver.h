@@ -17,16 +17,20 @@ public:
     {
         return _solver.newVar();
     };
-    void reportResult();
-    void printClauses();
-    void addClause(const std::vector<Lit> &clause);
-    void addSimplePBClause(const std::vector<Lit> &clause, const std::vector<int> &weights, int sum);
+    void printStats()
+    {
+        _solver.printStats();
+    };
     int getValue(Var var)
     {
         return _solver.modelValue(var) == l_True    ? 1
                : _solver.modelValue(var) == l_False ? 0
                                                     : -1;
     };
+
+    void reportResult();
+    void addClause(const std::vector<Lit> &clause);
+    void addSimplePBClause(const std::vector<Lit> &clause, const std::vector<int> &weights, int sum);
 
 private:
     Solver _solver;

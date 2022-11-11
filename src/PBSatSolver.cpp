@@ -10,16 +10,10 @@ void PBSatSolver::reportResult()
         std::cout << "UNSAT" << std::endl;
         return;
     }
-
-    std::cout << "SAT" << std::endl;
-
+    _solver.printStats();
     std::cout << std::endl;
 
-    _solver.printStats();
-}
-
-void PBSatSolver::printClauses()
-{
+    std::cout << "SAT" << std::endl;
 }
 
 void PBSatSolver::addClause(const std::vector<Lit> &clause)

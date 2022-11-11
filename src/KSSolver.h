@@ -23,6 +23,7 @@ public:
     void createConstraints(const std::vector<Cage> &cages, const std::vector<Box> &boxes);
     void solve();
     void reportResult();
+    void printStats();
 
 private:
     void createVars();

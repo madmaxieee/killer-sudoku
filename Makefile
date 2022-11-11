@@ -7,7 +7,7 @@ ARFLAGS = rcv
 # -g option is for debugging version
 # -O2 option is for optimized version
 DBGFLAGS = -g -DDEBUG -fsanitize=address
-OPTFLAGS = -O2
+OPTFLAGS = -O3
 
 all	: bin/sat_killer_sudoku
 	@echo ""
