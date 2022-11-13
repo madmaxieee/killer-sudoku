@@ -262,14 +262,8 @@ bool KSSolver::bruteForce()
     // remove candidates from row and column
     for (int i = 0; i < size * size; i++)
     {
-        if (solution[row][i] != 0)
-        {
-            candidates.erase(solution[row][i]);
-        }
-        if (solution[i][col] != 0)
-        {
-            candidates.erase(solution[i][col]);
-        }
+        candidates.erase(solution[row][i]);
+        candidates.erase(solution[i][col]);
     }
 
     // remove candidates from box
@@ -279,10 +273,7 @@ bool KSSolver::bruteForce()
     {
         for (int j = 0; j < size; j++)
         {
-            if (solution[boxRow * size + i][boxCol * size + j] != 0)
-            {
-                candidates.erase(solution[boxRow * size + i][boxCol * size + j]);
-            }
+            candidates.erase(solution[boxRow * size + i][boxCol * size + j]);
         }
     }
 
