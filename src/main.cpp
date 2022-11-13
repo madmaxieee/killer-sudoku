@@ -3,9 +3,8 @@
 #include "KillerSudoku.h"
 #include "KSSolver.h"
 
-void test()
+void test(int size)
 {
-    int size = 3;
     KillerSudoku ks(size);
     ks.generateNewSolution();
     ks.printSolution();
@@ -15,10 +14,8 @@ void test()
     KSSolver solver(size);
     // time the code
     auto start = std::chrono::high_resolution_clock::now();
-
     solver.solve(ks.getCages());
     solver.reportResult();
-
     auto finish = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = finish - start;
     std::cout << "Elapsed time: " << elapsed.count() << " s" << std::endl;
@@ -99,6 +96,6 @@ void benchmark(int size, int iterations)
 
 int main()
 {
-    benchmark(3, 100);
+    benchmark(3, 30);
     return 0;
 }

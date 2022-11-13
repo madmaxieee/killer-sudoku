@@ -17,6 +17,7 @@ void KSSolver::solve(const std::vector<Cage> &cages, bool verbose)
     {
         std::cout << "Solving Killer Sudoku with SAT solver..." << std::endl;
     }
+    createConstraints(cages);
     _solver.solve();
 }
 

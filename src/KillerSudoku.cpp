@@ -293,8 +293,8 @@ void KillerSudoku::generateCages()
 
 void KillerSudoku::generateCage(Cage &cage, std::vector<std::vector<bool>> &covered)
 {
-    // max size is a random number with normal distribution centered at size
-    int maxSize = std::max(2, std::min(size * size, (int)std::round(std::normal_distribution<double>(size, 1)(this->rng))));
+    // max size is a random number with normal distribution centered at 3
+    int maxSize = std::max(2, std::min(size * size, (int)std::round(std::normal_distribution<double>(3, 1)(this->rng))));
     // chose a random cell from the cage
     Cell cell;
     std::vector<int> directions = {0, 1, 2, 3};
