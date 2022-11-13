@@ -89,9 +89,9 @@ void benchmark(int size, int iterations)
     double bruteMedian = bruteTimes[iterations / 2];
 
     std::cout << "\n\n ============ Benchmark Results ============" << std::endl;
-    std::cout << "SAT solver mean: " << satMean << " s" << std::endl;
-    std::cout << "SAT solver standard deviation: " << satDev << " s" << std::endl;
-    std::cout << "SAT solver median: " << satMedian << " s" << std::endl;
+    std::cout << "SAT-based solver mean: " << satMean << " s" << std::endl;
+    std::cout << "SAT-based solver standard deviation: " << satDev << " s" << std::endl;
+    std::cout << "SAT-based solver median: " << satMedian << " s" << std::endl;
     std::cout << "Brute force solver mean: " << bruteMean << " s" << std::endl;
     std::cout << "Brute force solver standard deviation: " << bruteDev << " s" << std::endl;
     std::cout << "Brute force solver median: " << bruteMedian << " s" << std::endl;
