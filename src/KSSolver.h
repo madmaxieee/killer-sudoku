@@ -23,11 +23,11 @@ public:
     KSSolver(int size);
     ~KSSolver();
     void createConstraints(const std::vector<Cage> &cages);
-    void solve();
+    void solve(const std::vector<Cage> &cages, bool verbose = true);
     void reportResult();
     void printStats();
 
-    void bruteForceSolve();
+    void bruteForceSolve(const std::vector<Cage> &cages, bool verbose = true);
 
 private:
     void createVars();

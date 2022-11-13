@@ -10,9 +10,13 @@ KSSolver::~KSSolver()
 {
 }
 
-void KSSolver::solve()
+void KSSolver::solve(const std::vector<Cage> &cages, bool verbose)
 {
-    std::cout << "Solving..." << std::endl;
+    this->cages = cages;
+    if (verbose)
+    {
+        std::cout << "Solving Killer Sudoku with SAT solver..." << std::endl;
+    }
     _solver.solve();
 }
 
@@ -160,9 +164,13 @@ void ::KSSolver::createCageConstraints()
     }
 }
 
-void KSSolver::bruteForceSolve()
+void KSSolver::bruteForceSolve(const std::vector<Cage> &cages, bool verbose)
 {
-    std::cout << "brute force solving..." << std::endl;
+    this->cages = cages;
+    if (verbose)
+    {
+        std::cout << "Solving Killer Sudoku with brute force..." << std::endl;
+    }
     solution = std::vector<std::vector<int>>(size * size, std::vector<int>(size * size, 0));
 
     cell2cage.resize(size * size);
@@ -178,20 +186,22 @@ void KSSolver::bruteForceSolve()
         }
     }
 
-    bool result = bruteForce();
+    bool success = bruteForce();
 
-    // print solution
-    for (int i = 0; i < size * size; i++)
+    if (verbose && success)
     {
-        for (int j = 0; j < size * size; j++)
+        for (int i = 0; i < size * size; i++)
         {
-            if (solution[i][j] < 10)
+            for (int j = 0; j < size * size; j++)
             {
-                std::cout << " ";
+                if (solution[i][j] < 10)
+                {
+                    std::cout << " ";
+                }
+                std::cout << solution[i][j] << " ";
             }
-            std::cout << solution[i][j] << " ";
+            std::cout << std::endl;
         }
-        std::cout << std::endl;
     }
 }
 
