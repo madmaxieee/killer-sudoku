@@ -16,6 +16,9 @@ private:
     std::vector<Cage> cages;
     std::vector<std::vector<std::vector<Var>>> variables;
 
+    std::vector<std::vector<int>> solution;
+    std::vector<std::vector<Cage>> cell2cage;
+
 public:
     KSSolver(int size);
     ~KSSolver();
@@ -23,6 +26,8 @@ public:
     void solve();
     void reportResult();
     void printStats();
+
+    void bruteForceSolve();
 
 private:
     void createVars();
@@ -32,4 +37,7 @@ private:
     void createColumnConstraints();
     void createBoxConstraints();
     void createCageConstraints();
+
+    bool bruteForce();
+    std::pair<int, int> getFirstEmptyCell();
 };

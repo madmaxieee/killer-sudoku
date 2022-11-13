@@ -159,3 +159,133 @@ void ::KSSolver::createCageConstraints()
         _solver.addSimplePBClause(lits, weights, cage.sum);
     }
 }
+
+void KSSolver::bruteForceSolve()
+{
+    std::cout << "brute force solving..." << std::endl;
+    solution = std::vector<std::vector<int>>(size * size, std::vector<int>(size * size, 0));
+
+    cell2cage.resize(size * size);
+    for (int i = 0; i < size * size; i++)
+    {
+        cell2cage[i].resize(size * size);
+    }
+    for (auto cage : cages)
+    {
+        for (auto cell : cage.cells)
+        {
+            cell2cage[cell.first][cell.second] = cage;
+        }
+    }
+
+    bool result = bruteForce();
+
+    // print solution
+    for (int i = 0; i < size * size; i++)
+    {
+        for (int j = 0; j < size * size; j++)
+        {
+            if (solution[i][j] < 10)
+            {
+                std::cout << " ";
+            }
+            std::cout << solution[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+}
+
+std::pair<int, int> KSSolver::getFirstEmptyCell()
+{
+    for (int i = 0; i < size * size; i++)
+    {
+        for (int j = 0; j < size * size; j++)
+        {
+            if (solution[i][j] == 0)
+            {
+                return std::make_pair(i, j);
+            }
+        }
+    }
+    return std::make_pair(-1, -1);
+}
+
+bool KSSolver::bruteForce()
+{
+    std::pair<int, int> emptyCell = getFirstEmptyCell();
+    int row = emptyCell.first;
+    int col = emptyCell.second;
+
+    if (row == -1 && col == -1)
+    {
+        return true;
+    }
+
+    if (row == size * size)
+    {
+        return true;
+    }
+
+    Cage cage = cell2cage[row][col];
+    int emptyCells = cage.cells.size();
+    int diff = cage.sum;
+    for (auto cell : cage.cells)
+    {
+        if (solution[cell.first][cell.second] != 0)
+        {
+            diff -= solution[cell.first][cell.second];
+            emptyCells--;
+        }
+    }
+
+    std::unordered_set<int> candidates;
+    // calculate min and max
+    int max = std::min(diff - 1 * (emptyCells - 1), 9);
+    int min = std::max(diff - size * size * (emptyCells - 1), 1);
+
+    for (int i = min; i <= max; i++)
+    {
+        candidates.insert(i);
+    }
+
+    // remove candidates from row and column
+    for (int i = 0; i < size * size; i++)
+    {
+        if (solution[row][i] != 0)
+        {
+            candidates.erase(solution[row][i]);
+        }
+        if (solution[i][col] != 0)
+        {
+            candidates.erase(solution[i][col]);
+        }
+    }
+
+    // remove candidates from box
+    int boxRow = row / size;
+    int boxCol = col / size;
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < size; j++)
+        {
+            if (solution[boxRow * size + i][boxCol * size + j] != 0)
+            {
+                candidates.erase(solution[boxRow * size + i][boxCol * size + j]);
+            }
+        }
+    }
+
+    // try to solve recursively
+    for (int candidate : candidates)
+    {
+        solution[row][col] = candidate;
+
+        if (bruteForce())
+        {
+            return true;
+        }
+    }
+
+    solution[row][col] = 0;
+    return false;
+}
