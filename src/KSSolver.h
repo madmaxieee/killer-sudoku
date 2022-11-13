@@ -26,8 +26,10 @@ public:
     void solve(const std::vector<Cage> &cages, bool verbose = true);
     void reportResult();
     void printStats();
+    std::vector<std::vector<int>> getSolution();
 
     void bruteForceSolve(const std::vector<Cage> &cages, bool verbose = true);
+    std::vector<std::vector<int>> getBruteForceSolution();
 
 private:
     void createVars();

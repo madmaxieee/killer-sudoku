@@ -360,3 +360,70 @@ void KillerSudoku::generateCage(Cage &cage, std::vector<std::vector<bool>> &cove
         }
     }
 }
+
+bool KillerSudoku::checkSolution(std::vector<std::vector<int>> &solution)
+{
+    // check if the solution is valid
+    for (int i = 0; i < size * size; i++)
+    {
+        for (int j = 0; j < size * size; j++)
+        {
+            if (solution[i][j] < 1 || solution[i][j] > size * size)
+            {
+                return false;
+            }
+        }
+    }
+
+    // check for duplicates in rows and columns
+    for (int i = 0; i < size * size; i++)
+    {
+        std::vector<bool> row = std::vector<bool>(size * size, false);
+        std::vector<bool> col = std::vector<bool>(size * size, false);
+        for (int j = 0; j < size * size; j++)
+        {
+            if (row[solution[i][j] - 1] || col[solution[j][i] - 1])
+            {
+                return false;
+            }
+            row[solution[i][j] - 1] = true;
+            col[solution[j][i] - 1] = true;
+        }
+    }
+
+    // check for duplicates in boxes
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < size; j++)
+        {
+            std::vector<bool> box = std::vector<bool>(size * size, false);
+            for (int k = 0; k < size; k++)
+            {
+                for (int l = 0; l < size; l++)
+                {
+                    if (box[solution[i * size + k][j * size + l] - 1])
+                    {
+                        return false;
+                    }
+                    box[solution[i * size + k][j * size + l] - 1] = true;
+                }
+            }
+        }
+    }
+
+    // check cage sums
+    for (int i = 0; i < this->cages.size(); i++)
+    {
+        int sum = 0;
+        for (int j = 0; j < this->cages[i].cells.size(); j++)
+        {
+            sum += solution[this->cages[i].cells[j].first][this->cages[i].cells[j].second];
+        }
+        if (sum != this->cages[i].sum)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}

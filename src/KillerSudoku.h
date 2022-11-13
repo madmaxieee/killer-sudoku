@@ -40,6 +40,8 @@ public:
     void generateNewSolution();
     void generateCages();
 
+    bool checkSolution(std::vector<std::vector<int>> &solution);
+
     // getters
     std::vector<Box> &getBoxes();
     std::vector<std::vector<int>> &getSolution();

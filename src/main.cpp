@@ -15,10 +15,20 @@ void test(int size)
     // time the code
     auto start = std::chrono::high_resolution_clock::now();
     solver.solve(ks.getCages());
-    solver.reportResult();
     auto finish = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = finish - start;
     std::cout << "Elapsed time: " << elapsed.count() << " s" << std::endl;
+
+    // check if the solution is correct
+    std::vector<std::vector<int>> solution = solver.getSolution();
+    if (ks.checkSolution(solution))
+    {
+        std::cout << "Solution is correct!" << std::endl;
+    }
+    else
+    {
+        std::cout << "Solution is incorrect!" << std::endl;
+    }
 
     std::cout << std::endl;
 
@@ -27,6 +37,17 @@ void test(int size)
     finish = std::chrono::high_resolution_clock::now();
     elapsed = finish - start;
     std::cout << "Elapsed time: " << elapsed.count() << " s" << std::endl;
+
+    // check if the solution is correct
+    solution = solver.getBruteForceSolution();
+    if (ks.checkSolution(solution))
+    {
+        std::cout << "Solution is correct!" << std::endl;
+    }
+    else
+    {
+        std::cout << "Solution is incorrect!" << std::endl;
+    }
 }
 
 void benchmark(int size, int iterations)

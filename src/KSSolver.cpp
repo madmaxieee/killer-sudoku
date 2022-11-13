@@ -19,6 +19,10 @@ void KSSolver::solve(const std::vector<Cage> &cages, bool verbose)
     }
     createConstraints(cages);
     _solver.solve();
+    if (verbose)
+    {
+        reportResult();
+    }
 }
 
 void KSSolver::reportResult()
@@ -147,7 +151,7 @@ void KSSolver::createBoxConstraints()
     }
 }
 
-void ::KSSolver::createCageConstraints()
+void KSSolver::createCageConstraints()
 {
     for (auto cage : cages)
     {
@@ -163,6 +167,25 @@ void ::KSSolver::createCageConstraints()
         }
         _solver.addSimplePBClause(lits, weights, cage.sum);
     }
+}
+
+std::vector<std::vector<int>> KSSolver::getSolution()
+{
+    std::vector<std::vector<int>> solution(size * size, std::vector<int>(size * size, 0));
+    for (int i = 0; i < size * size; i++)
+    {
+        for (int j = 0; j < size * size; j++)
+        {
+            for (int k = 0; k < size * size; k++)
+            {
+                if (_solver.getValue(variables[i][j][k]) == 1)
+                {
+                    solution[i][j] = k + 1;
+                }
+            }
+        }
+    }
+    return solution;
 }
 
 void KSSolver::bruteForceSolve(const std::vector<Cage> &cages, bool verbose)
@@ -290,4 +313,9 @@ bool KSSolver::bruteForce()
 
     solution[row][col] = 0;
     return false;
+}
+
+std::vector<std::vector<int>> KSSolver::getBruteForceSolution()
+{
+    return solution;
 }
