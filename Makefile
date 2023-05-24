@@ -1,5 +1,5 @@
 # CC and CFLAGS are varilables
-CC = g++ -std=c++11 -Wno-deprecated-declarations
+CC = g++ -std=c++20 -Wno-deprecated-declarations
 CFLAGS = -c
 AR = ar
 ARFLAGS = rcv
